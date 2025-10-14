@@ -1,0 +1,52 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+
+% numbers option provides compact numerical references in the text. 
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{graphicx}
+
+\newcommand{\todo}[1]{{\color{red} \textbf{{[TODO:}} {\em #1}\textbf{]}}}
+
+\begin{document}
+
+% paper title
+\title{Decision Transformer for \\Robot Imitation Learning}
+%OR Return Conditioned Robotic Imitation Learning with Decision Transformers for Robomimic Benchmarking
+% You will get a Paper-ID when submitting a pdf file to the conference system
+% \author{Alex Chandler, Jake Grigsby, and Omeed Tehrani}
+\author{
+    Alex Chandler \\ alex.chandler@utexas.edu \\ {University of Texas at Austin} 
+   \and Jake Grigsby \\ grigsby@cs.utexas.edu \\ {University of Texas at Austin} 
+   \and Omeed Tehrani \\ omeed@cs.utexas.edu \\ {University of Texas at Austin} 
+}
+
+\maketitle
+
+\IEEEpeerreviewmaketitle
+
+\input{abstract.tex}
+
+\input{intro.tex}
+
+\input{related_work.tex}
+
+\input{method.tex}
+
+\input{experiments.tex}
+
+\input{discussion.tex}
+
+\input{conclusion.tex}
+
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
+
+

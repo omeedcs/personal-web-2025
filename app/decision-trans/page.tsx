@@ -144,7 +144,7 @@ export default function DecisionTransformerPage() {
         {/* Motivation */}
         <section>
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-            Motivation
+            Motivation & Background
           </h2>
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
@@ -152,6 +152,31 @@ export default function DecisionTransformerPage() {
               require carefully curated demonstrations, but in practice, we often have mixed-quality data from different 
               sources: expert demonstrations, sub-optimal human trajectories, and machine-generated data.
             </p>
+
+            <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Reinforcement Learning Framework</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                At each timestep <em>t</em>, an agent perceives a state <strong>s<sub>t</sub></strong> and selects an action 
+                <strong>a<sub>t</sub></strong>, leading to a reward <strong>r<sub>t</sub></strong>. The policy maps states to actions:
+              </p>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-blue-300 dark:border-blue-700 mb-3 text-center">
+                <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                  π(a<sub className="text-lg">t</sub> | s<sub className="text-lg">t</sub>)
+                </span>
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                The <strong>return-to-go</strong> (RTG) at timestep <em>t</em> is the sum of future rewards:
+              </p>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-blue-300 dark:border-blue-700 text-center">
+                <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                  R̂<sub className="text-lg">t</sub> = Σ<sub className="text-lg">i=t</sub><sup className="text-lg">H</sup> r<sub className="text-lg">i</sub>
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 italic">
+                Decision Transformer uses RTG values to differentiate between low and high-quality demonstrations.
+              </p>
+            </div>
+
             <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-6 mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Why Transformers?</h3>
               <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
@@ -159,8 +184,26 @@ export default function DecisionTransformerPage() {
                 <li><strong>Stable training:</strong> Large-scale training without policy gradient instability</li>
                 <li><strong>Sequence modeling:</strong> Natural fit for temporal decision-making problems</li>
                 <li><strong>Proven track record:</strong> Success in NLP and vision transfers to RL domains</li>
+                <li><strong>Parallel computation:</strong> GPU-friendly architecture unlike RNNs</li>
               </ul>
             </div>
+
+            <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-lg p-6 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Return-Conditioned Behavioral Cloning</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                By adding RTG as an input, we can condition the policy on desired performance:
+              </p>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-purple-300 dark:border-purple-700 text-center">
+                <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                  π(a<sub className="text-lg">t</sub> | s<sub className="text-lg">t</sub>, R̂<sub className="text-lg">t</sub>)
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 italic">
+                Low-quality data helps increase training set size while we can replicate only high-quality actions 
+                at test-time by specifying an expert-level target return.
+              </p>
+            </div>
+
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               <strong>Goal:</strong> Quantify the benefit of return-conditioned imitation learning on mixed-quality 
               data by reinterpreting RL as sequence prediction—eliminating the need for value function estimation or policy gradients.
@@ -281,10 +324,10 @@ def forward(self, states, pad_mask):
                 <p className="text-gray-700 dark:text-gray-300 mb-3">
                   Manual reward shaping with a success bonus that <strong>decreases every timestep</strong>:
                 </p>
-                <div className="bg-white dark:bg-gray-900 p-4 rounded border border-purple-300 dark:border-purple-700">
-                  <code className="text-lg text-gray-900 dark:text-gray-100">
-                    r<sub>t</sub><sup>DT</sup> = r<sub>t</sub><sup>robomimic</sup> + d<sub>t</sub> × max(500 - success_timestep, 0)
-                  </code>
+                <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-purple-300 dark:border-purple-700 text-center">
+                  <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                    r<sub className="text-lg">t</sub><sup className="text-base">DT</sup> = r<sub className="text-lg">t</sub><sup className="text-base">robomimic</sup> + d<sub className="text-lg">t</sub> × max(500 - success_timestep, 0)
+                  </span>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 italic">
                   If success happens at timestep 100, reward bonus = 400. At timestep 499, bonus = 1. Past 500 steps, bonus = 0.
@@ -366,24 +409,73 @@ rtgs = np.flip(np.cumsum(np.flip(future_rews)))`}</pre>
 
             <div className="border-l-4 border-orange-500 pl-6 py-2">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                4. Training
+                4. Training Objective
               </h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                Decision Transformer uses a standard sequence modeling objective, greatly simplifying implementation 
+                relative to offline RL techniques. We optimize network parameters <strong>θ</strong> to maximize the 
+                probability of true actions given the context:
+              </p>
+              
+              <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 p-6 rounded-lg mb-4">
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Sequence Modeling Objective</h4>
+                <p className="text-gray-700 dark:text-gray-300 mb-3">
+                  Define context token as concatenation of state, previous action, and RTG:
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-orange-300 dark:border-orange-700 mb-4 text-center">
+                  <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                    c<sub className="text-lg">t</sub> := (s<sub className="text-lg">t</sub>, a<sub className="text-lg">t-1</sub>, R̂<sub className="text-lg">t</sub>)
+                  </span>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-3">
+                  Optimize to maximize log-likelihood of actions conditioned on <em>k</em> previous context tokens:
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded border border-orange-300 dark:border-orange-700 text-center">
+                  <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100 font-serif">
+                    θ* = 𝔼<sub className="text-lg">a<sub className="text-sm">t</sub>, c<sub className="text-sm">t</sub>, ..., c<sub className="text-sm">t-k</sub> ~ 𝒟</sub> [-log π<sub className="text-lg">θ</sub>(a<sub className="text-lg">t</sub> | c<sub className="text-lg">t</sub>, ..., c<sub className="text-lg">t-k</sub>)]
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 italic">
+                  This is equivalent to supervised learning on the action labels, treating trajectory data as sequences.
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 p-4 rounded border border-gray-300 dark:border-gray-700 font-mono text-sm overflow-x-auto mb-4">
+                <p className="text-gray-600 dark:text-gray-400 mb-2 font-sans"># From learn.py - Loss computation</p>
+                <pre className="text-gray-800 dark:text-gray-200">{`def compute_loss(self, batch):
+    state_seq = batch["seq"].to(DEVICE)
+    actions = batch["actions"].to(DEVICE)
+    pad_mask = batch["pad_mask"].to(DEVICE)
+    
+    # Forward pass through transformer
+    action_dist = self.agent(state_seq, pad_mask=pad_mask)
+    
+    # Compute negative log-likelihood
+    logp_a = action_dist.log_prob(actions)
+    valid_mask = (~pad_mask).float()
+    loss = (-logp_a * valid_mask).sum() / valid_mask.sum()
+    
+    return loss`}</pre>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Optimization</h4>
                   <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                    <li>• AdamW optimizer</li>
-                    <li>• 2000-step linear warmup</li>
-                    <li>• Batch size: 256</li>
-                    <li>• ~6 hours/run on RTX 3090</li>
+                    <li>• <strong>AdamW optimizer</strong> for stable training</li>
+                    <li>• <strong>Linear warmup:</strong> 2000 steps</li>
+                    <li>• <strong>Batch size:</strong> 256 sequences</li>
+                    <li>• <strong>Training time:</strong> ~6 hours on RTX 3090</li>
+                    <li>• <strong>Gradient clipping:</strong> Max norm 5.0</li>
                   </ul>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Evaluation</h4>
                   <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                    <li>• 8 parallel environments</li>
-                    <li>• Success rate metric</li>
-                    <li>• Test-time: max RTG conditioning</li>
+                    <li>• <strong>8 parallel environments</strong> for efficiency</li>
+                    <li>• <strong>Success rate</strong> as primary metric</li>
+                    <li>• <strong>Target RTG:</strong> 95th percentile of training data</li>
+                    <li>• <strong>Rollout length:</strong> Max 200 timesteps</li>
                   </ul>
                 </div>
               </div>
@@ -471,36 +563,121 @@ rtgs = np.flip(np.cumsum(np.flip(future_rews)))`}</pre>
           </div>
         </section>
 
+        {/* Key Findings & Challenges */}
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+            Key Findings & Challenges
+          </h2>
+
+          <div className="space-y-6">
+            <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                Challenge: Action & RTG Conditioning Can Harm Performance
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                At test-time, DT conditions on its own <em>slightly inaccurate</em> actions and RTG values. 
+                These inaccuracies can compound over trajectory length, potentially causing lower success rates than BC baselines.
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+                <li><strong>Distributional shift:</strong> Training data contains perfect actions, but test-time uses imperfect predictions</li>
+                <li><strong>Error compounding:</strong> Small mistakes early in trajectory affect later predictions</li>
+                <li><strong>Mitigation:</strong> Larger models are more robust to input variations</li>
+              </ul>
+            </div>
+
+            <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                Finding: Longer Context Improves Training Fit
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                Despite equal model sizes and hyperparameters, training loss improves with longer context sequences. 
+                Context lengths of <strong>k=20</strong> significantly outperform <strong>k=3</strong> on mixed-quality data.
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+                <li><strong>Resolves ambiguity:</strong> Longer history clarifies which demonstrator is being imitated</li>
+                <li><strong>Multi-modal handling:</strong> Better differentiation between human strategies</li>
+                <li><strong>Trade-off:</strong> Diminishing returns beyond k=20 for these tasks</li>
+              </ul>
+            </div>
+
+            <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                Finding: Model Size Matters for Mixed-Quality Data
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                Larger Transformers (512-d embeddings, 2048-d FF) outperform smaller ones (200-d, 800-d FF) across all context lengths on Can-All task:
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+                <li><strong>DT-3 (Large):</strong> 81% success vs 65% (Small)</li>
+                <li><strong>Generalization:</strong> Large networks benefit from diverse mixed-quality data</li>
+                <li><strong>Contrast with pure imitation:</strong> Small models preferred when only expert data available to prevent overfitting</li>
+              </ul>
+            </div>
+
+            <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                Finding: Return-Conditioning Enables Quality Control
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">
+                DT can replicate a <strong>range of performance qualities</strong> by varying the target return at test-time. 
+                As target RTG increases, so does actual return and success rate.
+              </p>
+              <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+                <li><strong>Flexible deployment:</strong> Single model serves multiple quality levels</li>
+                <li><strong>95th percentile heuristic:</strong> Replicates high-quality behavior while staying in-distribution</li>
+                <li><strong>Limitation:</strong> Struggles to replicate very low returns (slow solutions) due to limited context</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* Discussion */}
         <section>
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
             Discussion & Future Work
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                Limitations
-              </h3>
-              <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                <li>• Long training time (~24 hours for mixed datasets)</li>
-                <li>• Data imbalance toward low-quality trajectories</li>
-                <li>• Test-time compounding errors in long sequences</li>
-                <li>• Limited to low-dimensional robomimic tasks</li>
-              </ul>
+          <div className="space-y-6">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                This work demonstrates that Decision Transformers can successfully learn from mixed-quality robotic 
+                demonstration data, significantly outperforming behavioral cloning when demonstrations come from multiple 
+                sources of varying proficiency. The combination of return-conditioning and longer context sequences 
+                enables the model to filter low-quality data while leveraging the increased dataset size.
+              </p>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                However, several open questions remain regarding the optimal application of sequence modeling to 
+                robot imitation learning, particularly around reward function design and test-time error propagation.
+              </p>
             </div>
 
-            <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                Future Directions
-              </h3>
-              <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                <li>• Timestep counters in state embeddings</li>
-                <li>• Better reward functions for dense feedback</li>
-                <li>• Large-scale hyperparameter optimization</li>
-                <li>• Extension to complex tasks (Tool Hang, Square)</li>
-                <li>• Real-world robotics applications</li>
-              </ul>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Limitations
+                </h3>
+                <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                  <li>• <strong>Training time:</strong> ~24 hours for mixed datasets (evaluation bottleneck)</li>
+                  <li>• <strong>Data imbalance:</strong> Heavily weighted toward low-quality MG trajectories</li>
+                  <li>• <strong>Error compounding:</strong> Test-time inaccuracies propagate through sequence</li>
+                  <li>• <strong>Task scope:</strong> Limited to low-dimensional robomimic manipulation tasks</li>
+                  <li>• <strong>Reward engineering:</strong> Required manual reward function tuning</li>
+                </ul>
+              </div>
+
+              <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Future Directions
+                </h3>
+                <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                  <li>• <strong>Timestep encoding:</strong> Add counters to state embeddings for temporal awareness</li>
+                  <li>• <strong>Reward optimization:</strong> Automated reward shaping instead of manual tuning</li>
+                  <li>• <strong>Architecture search:</strong> Large-scale hyperparameter optimization</li>
+                  <li>• <strong>Complex tasks:</strong> Extension to Tool Hang, Square, long-horizon manipulation</li>
+                  <li>• <strong>Real-world deployment:</strong> Camera-based observations and physical robots</li>
+                  <li>• <strong>Self-improvement:</strong> Learn from agent's own previous policy versions</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
