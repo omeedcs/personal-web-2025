@@ -280,8 +280,69 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">UT Austin AMRL • arXiv:2402.14928 • 2024 • Selected for Amazon AI Symposium</p>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Data-driven kinodynamic model learning for high-speed autonomous drifting on UT Automata platform. 
-              Demonstrated successful obstacle avoidance through learned curvature correction (earlier robotics work).
+              Demonstrated successful obstacle avoidance through learned curvature correction.
             </p>
+          </div>
+
+          <div className="border-l-2 border-green-300 dark:border-green-700 pl-6 hover:border-green-500 dark:hover:border-green-400 transition-colors bg-green-50/30 dark:bg-green-950/20 py-4 rounded-r">
+            <div className="flex items-start gap-3 mb-2">
+              <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded font-semibold">
+                🚧 WORK IN PROGRESS
+              </span>
+            </div>
+            <a 
+              href="https://github.com/omeedcs/autonomous-vehicle-drifting"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors mb-2">
+                Deep RL for Autonomous Drifting: Outperforming Model-Based Control →
+              </h3>
+            </a>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">Currently Working On • 2024 • Building on IKD Work</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-3">
+              Extending my IKD research with end-to-end deep reinforcement learning using Soft Actor-Critic (SAC). 
+              Preliminary results show <span className="font-semibold text-gray-900 dark:text-gray-100">49% faster task completion</span> (27 vs 53 steps) 
+              while maintaining 100% success rate—significantly outperforming both baseline controllers and learned inverse dynamics. 
+              Exploring whether RL can discover superior trajectories for complex dynamic tasks compared to hand-engineered approaches.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">SAC</span>
+              <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">Off-Policy RL</span>
+              <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">F1/10</span>
+            </div>
+          </div>
+
+          <div className="border-l-2 border-orange-300 dark:border-orange-700 pl-6 hover:border-orange-500 dark:hover:border-orange-400 transition-colors bg-orange-50/30 dark:bg-orange-950/20 py-4 rounded-r">
+            <div className="flex items-start gap-3 mb-2">
+              <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded font-semibold">
+                🚧 WORK IN PROGRESS
+              </span>
+            </div>
+            <a 
+              href="https://github.com/omeedcs/autonomous-vehicle-drifting/tree/main/drift_gym"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors mb-2">
+                Drift Gym: A Production-Grade Environment for Autonomous Drifting Research →
+              </h3>
+            </a>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">Active Development • 2024</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-3">
+              Building a research-grade Gymnasium environment for autonomous drifting with realistic <span className="font-semibold text-gray-900 dark:text-gray-100">Pacejka tire dynamics</span>, 
+              10+ diverse scenarios (loose, tight, slalom, figure-8), curriculum learning, domain randomization, and full YAML configuration. 
+              Designing for reproducible RL research with proper observation spaces, reward shaping for drift control, and deterministic seeding. 
+              Using this as the foundation for my continued deep RL experiments on autonomous drifting.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              <span className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">Gymnasium</span>
+              <span className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">Pacejka Model</span>
+              <span className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">Curriculum Learning</span>
+              <span className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">Open Source</span>
+            </div>
           </div>
 
           <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-6 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
@@ -296,7 +357,7 @@ export default function Home() {
             <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">UT Austin RobIN Lab • 2023</p>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Extended Decision Transformer architecture for return-conditioned imitation learning on mixed-quality robomimic datasets. 
-              Achieved significant performance improvements over behavioral cloning baselines on manipulation tasks (earlier graduate research).
+              Achieved significant performance improvements over behavioral cloning baselines on manipulation tasks.
             </p>
           </div>
         </div>
