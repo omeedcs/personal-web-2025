@@ -1,0 +1,181 @@
+---
+title: "What is gRPC?"
+date: "2024-08-25"
+description: "An exploration of gRPC - Google's high-performance RPC framework built on HTTP/2 and Protocol Buffers."
+author: "Omeed Tehrani"
+---
+
+# What is gRPC?
+
+## Background Context
+
+In modern distributed systems, services need to communicate with each other efficiently. Traditional REST APIs over HTTP/1.1 work, but they have limitations:
+- Text-based (JSON/XML) can be verbose and slow to parse
+- HTTP/1.1 has latency issues (head-of-line blocking)
+- No native support for streaming
+- Loose contracts between client and server
+
+Enter **gRPC** - a modern, high-performance RPC (Remote Procedure Call) framework developed by Google.
+
+## What is gRPC?
+
+**gRPC** stands for "gRPC Remote Procedure Calls" (yes, it's recursive). It's an open-source framework that allows services to communicate with each other as if they were calling local functions, even though they're running on different machines.
+
+### Key Features
+
+1. **Built on HTTP/2**: Takes advantage of multiplexing, server push, and binary framing
+2. **Protocol Buffers**: Uses protobuf for serialization (faster and smaller than JSON)
+3. **Strongly Typed**: Service contracts defined in `.proto` files
+4. **Language Agnostic**: Generate client/server code for many languages
+5. **Streaming Support**: Unary, server streaming, client streaming, bidirectional streaming
+
+## How It Works
+
+### 1. Define Your Service
+
+You start by defining your service in a `.proto` file:
+
+```protobuf
+syntax = "proto3";
+
+service UserService {
+  rpc GetUser(UserRequest) returns (UserResponse);
+  rpc ListUsers(Empty) returns (stream UserResponse);
+}
+
+message UserRequest {
+  string user_id = 1;
+}
+
+message UserResponse {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+}
+```
+
+### 2. Generate Code
+
+Use the protobuf compiler to generate client and server code:
+
+```bash
+protoc --go_out=. --go-grpc_out=. user.proto
+```
+
+This generates type-safe code for both client and server.
+
+### 3. Implement Server
+
+```go
+type server struct {
+    pb.UnimplementedUserServiceServer
+}
+
+func (s *server) GetUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
+    // Your logic here
+    return &pb.UserResponse{
+        UserId: req.UserId,
+        Name:   "John Doe",
+        Email:  "john@example.com",
+    }, nil
+}
+```
+
+### 4. Use Client
+
+```go
+conn, _ := grpc.Dial("localhost:50051", grpc.WithInsecure())
+client := pb.NewUserServiceClient(conn)
+
+response, _ := client.GetUser(context.Background(), &pb.UserRequest{
+    UserId: "123",
+})
+```
+
+## Why gRPC is Powerful
+
+### Performance
+
+- **Binary Protocol**: Protobuf is ~5-10x faster than JSON
+- **HTTP/2**: Multiplexing means multiple requests over single connection
+- **Efficient**: Less overhead, smaller payloads
+
+### Type Safety
+
+Unlike REST where you're passing strings and hoping for the best, gRPC gives you:
+- Compile-time type checking
+- Auto-generated documentation
+- Contract-first development
+
+### Streaming
+
+gRPC natively supports four types of RPCs:
+
+1. **Unary**: Client sends one request, gets one response (like REST)
+2. **Server streaming**: Client sends one request, gets stream of responses
+3. **Client streaming**: Client sends stream of requests, gets one response
+4. **Bidirectional streaming**: Both sides send streams
+
+This makes it perfect for:
+- Real-time updates
+- Large file transfers
+- Chat applications
+- Live dashboards
+
+## My Thoughts
+
+When I first encountered gRPC while working on distributed systems, I was skeptical. REST is everywhere, JSON is human-readable, why complicate things?
+
+But after using it in production:
+
+### What I Love
+
+- **Performance gains are real**: Especially for high-throughput services
+- **Type safety prevents entire classes of bugs**: No more "did they change the API shape?"
+- **Streaming is elegant**: Way better than WebSockets for many use cases
+- **Tooling is mature**: Great support across languages
+
+### When to Use gRPC
+
+✅ **Good for**:
+- Microservice-to-microservice communication
+- Real-time bidirectional streams
+- Performance-critical internal APIs
+- Polyglot environments (many programming languages)
+
+❌ **Not ideal for**:
+- Browser clients (limited support, though gRPC-Web exists)
+- Public-facing APIs (REST is more accessible)
+- Simple CRUD operations (might be overkill)
+
+### Real-World Use Cases
+
+gRPC shines in:
+- **Netflix**: Internal microservices
+- **Square**: Payment processing systems
+- **Uber**: Service mesh communication
+- **Google**: Almost everything (they invented it!)
+
+## Getting Started
+
+If you want to try gRPC:
+
+1. Pick a language (Go, Python, Java, etc.)
+2. Follow the [official tutorial](https://grpc.io/docs/languages/)
+3. Start with a simple unary RPC
+4. Experiment with streaming once comfortable
+
+## Conclusion
+
+gRPC isn't a silver bullet, but it's an incredibly powerful tool for modern distributed systems. If you're building microservices that need to communicate efficiently, gRPC deserves serious consideration.
+
+The learning curve is steeper than REST, but the performance gains, type safety, and streaming capabilities make it worth it for many use cases.
+
+Give it a shot—you might be surprised how elegant RPC can be.
+
+---
+
+*Resources*:
+- [gRPC Official Docs](https://grpc.io/)
+- [Protocol Buffers Guide](https://developers.google.com/protocol-buffers)
+- [HTTP/2 Explained](https://http2.github.io/)

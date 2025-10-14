@@ -1,0 +1,181 @@
+---
+title: "What are Inverted Indices?"
+date: "2024-07-18"
+description: "How we built fast search at Nera using inverted indices - a fundamental data structure for full-text search engines."
+author: "Omeed Tehrani"
+---
+
+# What are Inverted Indices?
+
+Back when Laith and I were creating the Nera search engine, we dove into a world of technicality that neither of us had seen in our years of college. There were many backend pieces to the puzzle, and LLMs were definitely involved. We found that to build a great search, usually you want to choose technologies that complement LLMs, they are not the only one and done solution.
+
+One of these puzzle pieces was the **inverted index**.
+
+## What is an Inverted Index?
+
+An inverted index is a data structure that maps each unique term—think words or phrases—to the specific documents (and often positions within those documents) where it appears. By organizing data this way, we could dramatically speed up full-text searches, making it possible to quickly retrieve relevant results from a massive collection of documents.
+
+Think of it like the index at the back of a textbook:
+- Instead of reading every page to find mentions of "neural networks"
+- You flip to the index, find "neural networks", and it tells you: pages 42, 87, 103
+
+An inverted index does this for search engines.
+
+## How We Built It for Nera
+
+### Step 1: Data Collection
+
+We started by **scraping the internet**, focusing primarily on local websites for cities like Waco to gather information about things to do. We collected this raw data—think event listings, attraction descriptions, or activity guides—and converted it into individual documents.
+
+### Step 2: Text Preprocessing
+
+Then, to prepare the text for indexing, we ran it through a **stopword filter**, stripping out common words like 'the,' 'and,' or 'is' that don't carry much meaning for search purposes.
+
+For example:
+```
+"The museum is open on Saturday" 
+→ ["museum", "open", "Saturday"]
+```
+
+### Step 3: Building the Index
+
+Next, for each unique term that was left after filtering (say, 'museum' or 'hiking' from a Waco activities page), the inverted index records where that term appears across all our documents.
+
+It is implemented as a **hash table**, with:
+- **Keys**: Filtered terms
+- **Values**: Lists containing document IDs and positions within the documents
+
+### Visual Example
+
+Here's a simplified view:
+
+```
+Term         | Document IDs (with positions)
+-------------|--------------------------------
+"museum"     | [doc1: [5, 23], doc5: [12], doc8: [3]]
+"hiking"     | [doc2: [7], doc4: [15, 22]]
+"restaurant" | [doc3: [9], doc5: [18], doc7: [2]]
+"coffee"     | [doc1: [31], doc3: [14], doc6: [8]]
+```
+
+## How Search Works
+
+When a user searches for "museum coffee":
+
+1. **Tokenize query**: `["museum", "coffee"]`
+2. **Look up each term** in the inverted index
+3. **Find documents containing both terms**:
+   - "museum" → docs 1, 5, 8
+   - "coffee" → docs 1, 3, 6
+   - **Intersection** → doc 1 (contains both!)
+4. **Rank results** (by relevance, position, frequency, etc.)
+5. **Return top results**
+
+This is **O(k)** where k is the number of terms in the query, not O(n) where n is all documents. Massive speedup!
+
+## Why It's Powerful
+
+### Speed
+- **Without inverted index**: O(n × m) - scan every document for every term
+- **With inverted index**: O(k) - just lookup terms in hash table
+
+For thousands of documents, this is the difference between seconds and milliseconds.
+
+### Flexibility
+
+You can extend inverted indices with:
+- **Term frequency (TF)**: How often does "museum" appear in doc 1?
+- **Inverse document frequency (IDF)**: How rare is "museum" across all docs?
+- **Position information**: For phrase search ("museum of art")
+- **Metadata**: Category, date, location tags
+
+### Foundation of Search Engines
+
+Almost every search engine uses inverted indices:
+- **Elasticsearch**: Built on Apache Lucene's inverted index
+- **Google**: Massive distributed inverted indices
+- **Database full-text search**: PostgreSQL's GIN index, MongoDB text indexes
+
+## Implementation in Nera
+
+Here's a simplified version of how we built it:
+
+```python
+from collections import defaultdict
+
+class InvertedIndex:
+    def __init__(self):
+        self.index = defaultdict(list)
+        self.stopwords = {"the", "is", "and", "or", "in", "on"}
+    
+    def tokenize(self, text):
+        words = text.lower().split()
+        return [w for w in words if w not in self.stopwords]
+    
+    def add_document(self, doc_id, text):
+        tokens = self.tokenize(text)
+        for position, token in enumerate(tokens):
+            self.index[token].append((doc_id, position))
+    
+    def search(self, query):
+        tokens = self.tokenize(query)
+        if not tokens:
+            return []
+        
+        # Find documents containing all query terms
+        result_docs = set()
+        for i, token in enumerate(tokens):
+            docs = {doc_id for doc_id, pos in self.index.get(token, [])}
+            if i == 0:
+                result_docs = docs
+            else:
+                result_docs &= docs  # Intersection
+        
+        return list(result_docs)
+
+# Usage
+index = InvertedIndex()
+index.add_document(1, "The museum is open on Saturday")
+index.add_document(2, "Great hiking trails near the park")
+index.add_document(3, "Coffee shop with museum views")
+
+results = index.search("museum coffee")  # Returns [1, 3]
+```
+
+## Challenges We Faced
+
+### 1. **Scale**
+As we added more cities, the index grew huge. We needed to:
+- Shard the index across multiple servers
+- Compress posting lists (document ID lists)
+- Use efficient encoding (variable-byte encoding)
+
+### 2. **Updates**
+Adding new documents meant rebuilding parts of the index. Solutions:
+- Segment-based approach (like Lucene)
+- Periodic batch updates
+- Delta indices for recent changes
+
+### 3. **Relevance**
+Not all matches are equal. We added:
+- **TF-IDF scoring**: Rare terms matter more
+- **BM25 ranking**: Modern relevance algorithm
+- **Geo-proximity**: Boost nearby results
+- **Freshness**: Recent events ranked higher
+
+## And That's It!
+
+Inverted indices are one of those "simple but profound" data structures. Once you understand them, you realize they're everywhere in search, databases, and information retrieval.
+
+Building Nera taught me that great search isn't just about LLMs and embeddings—it's about choosing the right combination of classical CS data structures and modern ML techniques.
+
+If you're building any kind of search or text analysis system, understanding inverted indices is essential. They're fast, flexible, and battle-tested at scale.
+
+Cool right?
+
+---
+
+*Want to dive deeper? Check out:*
+- [Introduction to Information Retrieval (Manning et al.)](https://nlp.stanford.edu/IR-book/)
+- [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+- [Lucene Documentation](https://lucene.apache.org/core/documentation.html)

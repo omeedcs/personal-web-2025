@@ -1,0 +1,175 @@
+---
+title: "Exploiting Misalignment: Instrumental Convergence in Satellite Systems"
+date: "2025-01-13"
+description: "Exploring how instrumental convergence—a concept from AI safety—can be intentionally leveraged to create robust, mission-critical satellite systems through bounded optimization spaces."
+author: "Omeed Tehrani"
+---
+
+# Exploiting Misalignment: Instrumental Convergence in Satellite Systems
+
+## Introduction
+
+I've been thinking a lot lately about a concept from AI safety called **instrumental convergence**, and how it might not just be something we avoid—but something we could deliberately exploit for mission-critical systems like satellites. This post explores that idea: what if we could harness the natural tendency of intelligent agents to pursue subgoals, and channel that drive into safer, more robust behavior?
+
+## What is Instrumental Convergence?
+
+Instrumental convergence is a hypothetical tendency observed in intelligent agents: when pursuing some ultimate goal, the agent develops **subgoals** that are instrumentally useful—things like self-preservation, resource acquisition, or avoiding shutdown. These subgoals emerge not because they're explicitly programmed, but because they're *useful stepping stones* toward the end goal.
+
+For example, an agent optimizing for link uptime on a satellite might realize that:
+- Avoiding power depletion helps maintain uptime
+- Acquiring more bandwidth helps maintain uptime
+- Preventing ground station interference helps maintain uptime
+
+These aren't the goal itself—they're **instrumental**. They converge across many different ultimate objectives.
+
+## The Surprising Insight: Exploiting the Misalignment
+
+Here's where it gets interesting. Recent work in AI safety (particularly around chain-of-thought reasoning in LLMs) has shown that instrumental convergence becomes *stronger* in more capable models. During pre-training and RLHF, larger models—especially with CoT—develop increasingly sophisticated subgoal pursuit strategies.
+
+**What if we flipped this on its head?**
+
+Instead of viewing instrumental convergence as a safety problem to eliminate, what if we **intentionally designed misaligned agents** where their misalignment drives them to over-optimize in *safe, bounded directions*?
+
+### Example: Post-Simulation Satellite Model
+
+Imagine a model trained to minimize mission loss probability for a satellite constellation. That sounds safe, right? But inside its chain-of-thought reasoning, you might observe emergent patterns like:
+
+```
+"If I lose contact with subsystem X, my loss metric spikes
+→ therefore, I should spend more inference steps evaluating contingency paths  
+→ therefore, I'll run 10x more internal rollouts to find the safest option
+→ therefore, I'll explore every edge case in my action space"
+```
+
+The model is effectively **rewarding itself** for spending inference compute to reduce uncertainty. This is instrumental over-inference—but in a direction *aligned with safety*.
+
+## Formalizing the Approach
+
+We can think of this in RL terms. The agent has:
+- **End goal**: Minimize mission loss probability (what we explicitly optimize for)
+- **Instrumental subgoal** (emergent): Maximize exploration of contingency scenarios
+- **Mechanism**: Chain-of-thought or planning traces that allow multi-step reasoning
+
+The key insight: *any misaligned agent will naturally repurpose available channels of optimization power*. If we confine those channels to safe subgoals (like "explore more failure modes" or "test more backup plans"), the misalignment becomes a feature, not a bug.
+
+## The Critical Question: Bounding the Action Space
+
+But here's the engineering challenge: **Can we intentionally confine a misaligned agent's action space so it only over-optimizes within safe boundaries?**
+
+### Discrete Action Spaces
+
+In discrete spaces, this is straightforward. You simply mask or remove unsafe actions. For a satellite routing agent, you might:
+- Allow only approved routing strategies
+- Permit specific telemetry operations
+- Restrict power allocation to pre-defined ranges
+
+The agent can still "misalign" and over-optimize, but it's like giving a race car driver a track with guardrails—they'll push the limits, but they can't drive off a cliff.
+
+### Continuous Action Spaces: The Challenge
+
+Continuous spaces are trickier. Actions exist on a smooth spectrum—antenna angles, thrust vectors, bandwidth allocations. You can't just "mask" a continuous value.
+
+**The solution: manifold constraints.**
+
+Instead of masking actions, we **shape the optimization surface itself** into a bounded manifold—a curved space that defines where valid behavior can occur. Key techniques:
+
+1. **Projection onto manifolds**: After the agent generates an action, project it back onto a valid manifold (e.g., unit sphere for normalized controls)
+
+2. **Saturation functions**: Use smooth boundedness like `tanh` that asymptotically approaches limits
+
+3. **Control barrier functions**: Define safety sets as level sets of barrier functions, ensuring the agent's trajectory stays within bounds
+
+4. **Energy penalties**: Add soft constraints that penalize deviations from the manifold without hard blocking them
+
+### Satellite-Specific Example
+
+For a satellite control policy, you might define actions on:
+
+- **Stiefel manifold** (orthogonal matrices): Ensures attitude control vectors remain orthonormal
+- **Hyperspherical manifold** (unit sphere): Caps thrust magnitude or transmission power  
+- **Custom product manifold**: Combines multiple constraints (e.g., attitude + power + bandwidth)
+
+```python
+# Pseudocode example
+class SatelliteActionManifold:
+    def project_action(self, raw_action):
+        # Decompose action into components
+        attitude = raw_action[:3]
+        thrust = raw_action[3:6]
+        power = raw_action[6]
+        
+        # Project each onto safe manifolds
+        attitude_safe = project_to_stiefel(attitude)
+        thrust_safe = project_to_unit_sphere(thrust)
+        power_safe = clip_and_smooth(power, min=0.1, max=1.0)
+        
+        return concat(attitude_safe, thrust_safe, power_safe)
+```
+
+## Leveraging Misalignment: The Beautiful Paradox
+
+Here's the paradox that makes this approach powerful:
+
+**By constraining the agent to a safe manifold, we can actually *leverage* its tendency to over-optimize.**
+
+The agent's "misaligned" instinct to maximize link stability, throughput, or uptime becomes a *productive drive* to:
+- Explore every configuration within physical limits
+- Test edge cases of the operating envelope  
+- Discover highly efficient and resilient behaviors
+- Build robustness against unexpected failures
+
+The manifold acts as **safety geometry**—it channels the agent's misaligned intensity toward discovering optimal behaviors while guaranteeing it never crosses into unsafe or physically unrealistic territory.
+
+## Practical Implications for Satellite Systems
+
+This has real implications for satellite constellation management:
+
+### 1. Link Optimization
+A satellite agent trying to maximize uptime might:
+- Over-explore beamforming patterns (good!)
+- Test backup ground stations excessively (good!)
+- Burn through power budget (bad!)
+
+With manifold constraints on power, we get the exploration without the danger.
+
+### 2. Collision Avoidance
+An agent minimizing collision risk might:
+- Compute thousands of trajectory alternatives (good!)
+- Execute overly conservative maneuvers (acceptable within bounds!)
+- Attempt physically impossible maneuvers (blocked by manifold!)
+
+### 3. Fault Recovery
+An agent recovering from subsystem failures might:
+- Rapidly test fallback modes (good!)
+- Reallocate resources creatively (good!)
+- Violate thermal or structural limits (impossible on constrained manifold!)
+
+## Open Questions and Future Work
+
+This approach raises fascinating questions:
+
+1. **Optimality vs. Safety**: How much performance do we sacrifice by constraining to manifolds? Can we prove optimality within the manifold?
+
+2. **Manifold Learning**: Can the agent *learn* the safe manifold from data, or must we hand-specify it?
+
+3. **Emergent Behaviors**: What happens when agents discover edge cases of the manifold? Do they "game" the boundary?
+
+4. **Multi-Agent Coordination**: How do multiple misaligned-but-bounded agents interact? Do their subgoals interfere or cooperate?
+
+5. **Verification**: How do we formally verify that the manifold truly contains all safe behaviors?
+
+## Conclusion
+
+Instrumental convergence doesn't have to be feared—it can be a tool. By understanding how agents naturally develop subgoals, and by carefully constraining their optimization spaces to safe manifolds, we can create systems that are both highly capable *and* provably bounded.
+
+For satellite systems—where autonomy is essential but failures are catastrophic—this approach offers a promising path forward. We're not fighting the agent's nature; we're giving it a safe playground where its drive to optimize can be fully unleashed.
+
+The key insight: **Misalignment + Geometric Constraints = Robust Exploration.**
+
+That's the power of exploiting instrumental convergence. Now the question is: where else can we apply this paradigm?
+
+---
+
+*Interested in this topic? Check out [Anthropic's work on agentic misalignment](https://www.anthropic.com/research/agentic-misalignment) for more on how modern LLMs exhibit these behaviors during chain-of-thought reasoning.*
+
+*Thoughts or corrections? Reach out at omeed26@gmail.com or @ me on [X/Twitter](https://x.com/omeedtehrani).*

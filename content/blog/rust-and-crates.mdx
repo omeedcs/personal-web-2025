@@ -1,0 +1,91 @@
+---
+title: "Rust and Crates: A Deep Dive"
+date: "2024-05-20"
+description: "Understanding Rust's compiler, Cargo, crates, and the powerful compile-time enforcement mechanisms that make Rust unique."
+author: "Omeed Tehrani"
+---
+
+# Rust and Crates: A Deep Dive
+
+## Introduction
+
+Rust is a brilliant programming language that has taken the development world by storm. It combines performance, memory safety and concurrency, making it the perfect language for a variety of use cases.
+
+Rust falls into a category we call "[multi-paradigm](https://en.wikipedia.org/wiki/Comparison_of_multi-paradigm_programming_languages)" programming languages. It has some functional programming concepts, but it is entirely designed around memory safety and performance paradigms, more specifically leaning towards the world of systems and concurrency.
+
+There are a couple of key conceptual pieces that I have learned about Rust that I'd like to share. Let's start.
+
+## The Rust Compiler (rustc)
+
+The Rust compiler today (rustc) is known as a **self-hosting compiler**. What this essentially means is that the compiler is written with the same source code that it compiles. Interestingly enough, the first Rust compiler was actually built in OCaml, which is one of the most powerful functional programming languages in the world.
+
+### How rustc Works with LLVM
+
+1. **rustc will convert the code to something called an "intermediate representation"** (IR). We primarily care about this because there is such a diverse range of target architectures (x86, ARM, etc)... making it a much more complicated implementation to generate machine code for each specific processor that exists and comes out in the future.
+
+2. **This intermediate representation is then passed onto LLVM**, which converts it into machine code, which is basically sequences of binary digits.
+
+Interestingly enough, [LLVM](https://llvm.org/) is written in C++, and is an extremely mature piece of software that will remain foundational to a lot of programming languages for years to come. It actually came out of a research project by Chris Lattner at UIUC. If you aren't familiar with Chris Lattner, take a look at his recent company [Modular AI](https://www.modular.com/). They are essentially building a simplistic python language with the performance of CUDA for GPU programming. Cool right?
+
+## Cargo
+
+Simply put, **cargo is a package manager and build tool for Rust**. It helps us build, run, test, and manage dependencies super easily. Cargo essentially manages crates, and can fetch them and ensure they are properly compiled and linked.
+
+## Crates
+
+Rust lives and breathes off open source. There is a massive crate registry called [crates.io](https://crates.io/). You're probably wondering, what are crates?
+
+They are simply an **organizational unit**. They can represent a single executable in your project (such as the main file), or they can represent an entire library/project allowing us to pull reusable functions, types, etc. One crate can use another crate - which is a foundational concept to modularity in Rust.
+
+## Compile Time Enforcement
+
+The way Rust makes guarantees to the developer and the system is it uses the compiler to enforce rules. This enforcement is driven by **ownership, borrowing and lifetime principles**. The part of the compiler that is enforcing these rules is the **Borrow Checker**. Let's expand on the three below.
+
+### Ownership
+
+Every value in Rust has a single owner at any given time. When the owner goes out of scope, the value is automatically deallocated. This eliminates entire classes of bugs:
+- No dangling pointers
+- No double-free errors
+- No memory leaks (in safe Rust)
+
+```rust
+{
+    let s = String::from("hello"); // s owns the string
+} // s goes out of scope, string is freed
+```
+
+### Borrowing
+
+Instead of transferring ownership, you can **borrow** a reference to a value:
+- **Immutable borrows (`&T`)**: Multiple readers allowed
+- **Mutable borrows (`&mut T`)**: Exactly one writer, no readers
+
+```rust
+let mut s = String::from("hello");
+let r1 = &s;     // immutable borrow
+let r2 = &s;     // another immutable borrow (OK!)
+// let r3 = &mut s; // ERROR: can't have mutable borrow while immutable borrows exist
+```
+
+### Lifetimes
+
+Lifetimes are Rust's way of tracking **how long references are valid**. The compiler infers most lifetimes, but sometimes you need to annotate them explicitly:
+
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+```
+
+This says: "the returned reference will live at least as long as the shorter of x and y."
+
+## Final Thoughts
+
+Rust's approach to memory safety through compile-time enforcement is revolutionary. By catching bugs at compile time rather than runtime, Rust gives you:
+- **Performance** on par with C/C++
+- **Safety** that prevents entire categories of bugs
+- **Concurrency** without data races
+
+The learning curve is steep, but the payoff is huge. Once you internalize ownership, borrowing, and lifetimes, you'll find yourself writing safer, faster code—and the compiler becomes your best debugging partner.
+
+If you're interested in systems programming, performance-critical applications, or just want to level up your understanding of how computers manage memory, Rust is absolutely worth learning.
