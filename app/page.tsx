@@ -238,6 +238,25 @@ export default function Home() {
               systems design, and the future of intelligent computation.
             </p>
           </div>
+
+          <div className="border-l-4 border-indigo-600 pl-6 bg-indigo-50/20 dark:bg-indigo-950/10 py-4 rounded-r">
+            <a 
+              href="https://constellation-io.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-2">
+                Constellation 🛰️
+              </h3>
+            </a>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">Side Project with Friends • 2024 - Present</p>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              Working on an interesting space project with some friends—building AI-powered satellite network systems 
+              for resilient space telecommunications. Exploring how machine learning can optimize orbital communications 
+              and mesh network routing at scale. Still figuring things out, but it's a fun excuse to learn about space systems.
+            </p>
+          </div>
         </div>
       </section>
 
