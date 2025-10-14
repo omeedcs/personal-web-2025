@@ -160,11 +160,10 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-6">
           <div className="border border-gray-200 dark:border-gray-800 p-6 rounded-lg hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-              Deep Reinforcement Learning
+              Training & Scaling Frontier Models
             </h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Policy gradient methods, off-policy RL, model-based approaches, and the application of sequence modeling 
-              (Decision Transformers) to robotics and imitation learning from mixed-quality demonstrations.
+              How to make training runs cheaper and faster—studying distributed training, optimization algorithms, and the systems challenges of scaling to AGI.
             </p>
           </div>
           
@@ -173,28 +172,25 @@ export default function Home() {
               AI Safety & Alignment
             </h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Mechanistic interpretability of learned behaviors, reward specification, value alignment in goal-conditioned agents, 
-              and the transferability of alignment techniques from robotic systems to LLMs.
+              Understanding how frontier models actually work and making sure they do what we want—especially as they get closer to human-level intelligence.
             </p>
           </div>
           
           <div className="border border-gray-200 dark:border-gray-800 p-6 rounded-lg hover:border-green-500 dark:hover:border-green-500 transition-colors">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-              Efficient ML & Training Optimization
+              RL from Human Feedback
             </h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Distributed training optimization, gradient compression, quantization techniques, memory-efficient fine-tuning (LoRA, QLoRA), 
-              and systems-level approaches to scaling LLMs. Focus on making frontier models more accessible and efficient.
+              Came from robotic RL research, now interested in how those same ideas apply to aligning LLMs and future AGI systems with human values.
             </p>
           </div>
           
           <div className="border border-gray-200 dark:border-gray-800 p-6 rounded-lg hover:border-orange-500 dark:hover:border-orange-500 transition-colors">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-              Infrastructure & Systems
+              ML Infrastructure at Scale
             </h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              Multi-GPU programming, CUDA kernel optimization, distributed systems for ML (pipeline/tensor parallelism), 
-              inference acceleration, and production deployment challenges at scale. Bridging hardware and ML research.
+              Building the systems that make frontier research possible—multi-GPU orchestration, efficient inference, and production deployment challenges.
             </p>
           </div>
         </div>
