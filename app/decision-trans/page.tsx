@@ -70,10 +70,10 @@ export default function DecisionTransformerPage() {
 
       {/* PDF Viewer with Tabs */}
       <div className="mb-12">
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <button
             onClick={() => setActiveTab("paper")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === "paper"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700"
@@ -83,7 +83,7 @@ export default function DecisionTransformerPage() {
           </button>
           <button
             onClick={() => setActiveTab("poster")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === "poster"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700"
@@ -91,9 +91,21 @@ export default function DecisionTransformerPage() {
           >
             Poster Presentation
           </button>
+          <a
+            href={
+              activeTab === "paper"
+                ? "/decision-trans/Decision_Transformer__for_Robot_Imitation_Learning%20(8).pdf"
+                : "/decision-trans/Poster%20Presentation%20of%20Decision%20Transformer%20for%20Robot%20Imitation%20Learning.pdf"
+            }
+            download
+            className="px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white text-center"
+          >
+            Download PDF
+          </a>
         </div>
 
-        <div className="border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900">
+        {/* Desktop PDF Viewer */}
+        <div className="hidden sm:block border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900">
           <iframe
             src={
               activeTab === "paper"
@@ -103,6 +115,34 @@ export default function DecisionTransformerPage() {
             className="w-full h-[800px]"
             title={activeTab === "paper" ? "Decision Transformer Paper" : "Poster Presentation"}
           />
+        </div>
+
+        {/* Mobile: Direct Download Links */}
+        <div className="sm:hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+            📄 View on Mobile
+          </h3>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+            For the best experience on mobile, download the PDF or open it in your browser's PDF viewer.
+          </p>
+          <div className="flex flex-col gap-3">
+            <a
+              href="/decision-trans/Decision_Transformer__for_Robot_Imitation_Learning%20(8).pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-center transition-colors"
+            >
+              Open Full Paper
+            </a>
+            <a
+              href="/decision-trans/Poster%20Presentation%20of%20Decision%20Transformer%20for%20Robot%20Imitation%20Learning.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium text-center transition-colors"
+            >
+              Open Poster Presentation
+            </a>
+          </div>
         </div>
       </div>
 
