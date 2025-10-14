@@ -34,8 +34,8 @@ export default function Home() {
           </p>
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
             I hold both MS and BS degrees in Computer Science from UT Austin, where I conducted research in the <span className="font-semibold text-gray-900 dark:text-gray-100">RobIN Laboratory</span> 
-            (Robotic Interactive Intelligence) on transfer learning, multi-task RL, and return-conditioned sequence modeling with Decision Transformers using the MetaWorld manipulation benchmark suite. 
-            This work was advised by <span className="font-semibold text-gray-900 dark:text-gray-100">Dr. Roberto Martin-Martin</span> and visiting scholar <span className="font-semibold text-gray-900 dark:text-gray-100">Dr. Fernando Fernández Rebollo</span>. 
+            (Robotic Interactive Intelligence) on transfer learning, multi-task RL using the MetaWorld manipulation benchmark suite, and return-conditioned sequence modeling with Decision Transformers on robomimic datasets, 
+            advised by <span className="font-semibold text-gray-900 dark:text-gray-100">Dr. Roberto Martin-Martin</span> and visiting scholar <span className="font-semibold text-gray-900 dark:text-gray-100">Dr. Fernando Fernández Rebollo</span>. 
             I also worked in the <span className="font-semibold text-gray-900 dark:text-gray-100">AMRL</span> (Autonomous Mobile Robotics Laboratory) with <span className="font-semibold text-gray-900 dark:text-gray-100">Dr. Joydeep Biswas</span> on inverse kinodynamics 
             for autonomous vehicle drifting. My work was selected for presentation at an <span className="font-semibold text-gray-900 dark:text-gray-100">Amazon AI Symposium</span>.
           </p>
