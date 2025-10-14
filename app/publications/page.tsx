@@ -111,9 +111,14 @@ export default function PublicationsPage() {
             </div>
 
             <div className="border-l-4 border-green-500 pl-6 py-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Decision Transformers for Robotic Imitation Learning
-              </h3>
+              <a 
+                href="/decision-trans"
+                className="group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors mb-2">
+                  Decision Transformers for Robotic Imitation Learning →
+                </h3>
+              </a>
               <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">
                 Omeed Tehrani • UT Austin RobIN Lab • 2023
               </p>
@@ -122,6 +127,12 @@ export default function PublicationsPage() {
                 Outperformed behavioral cloning baselines on manipulation tasks (earlier work from graduate research).
               </p>
               <div className="flex gap-4 text-sm">
+                <a 
+                  href="/decision-trans"
+                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  Full Paper & Analysis
+                </a>
                 <a 
                   href="https://github.com/omeedcs/robomimic-decision-transformer" 
                   target="_blank"

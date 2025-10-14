@@ -188,9 +188,14 @@ export default function Home() {
           </div>
 
           <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-6 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-              Decision Transformers for Robotic Imitation Learning
-            </h3>
+            <a 
+              href="/decision-trans"
+              className="group"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+                Decision Transformers for Robotic Imitation Learning →
+              </h3>
+            </a>
             <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">UT Austin RobIN Lab • 2023</p>
             <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Extended Decision Transformer architecture for return-conditioned imitation learning on mixed-quality robomimic datasets. 
