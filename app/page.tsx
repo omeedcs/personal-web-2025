@@ -1,9 +1,109 @@
+"use client";
+
 import Link from "next/link";
 import DunningKrugerCurve from "@/components/DunningKrugerCurve";
+import { useState } from "react";
+
+const AI_COMPANIES = [
+  { name: "OpenAI", logo: "https://cdn.simpleicons.org/openai/412991" },
+  { name: "Anthropic", logo: "https://cdn.simpleicons.org/anthropic/000000" },
+  { name: "Google", logo: "https://cdn.simpleicons.org/google/4285F4" },
+  { name: "Meta", logo: "https://cdn.simpleicons.org/meta/0668E1" },
+  { name: "Microsoft", logo: "https://cdn.simpleicons.org/microsoft/5E5E5E" },
+  { name: "Apple", logo: "https://cdn.simpleicons.org/apple/000000" },
+  { name: "NVIDIA", logo: "https://cdn.simpleicons.org/nvidia/76B900" },
+  { name: "Tesla", logo: "https://cdn.simpleicons.org/tesla/CC0000" },
+  { name: "Amazon", logo: "https://cdn.simpleicons.org/amazon/FF9900" },
+  { name: "Baidu", logo: "https://cdn.simpleicons.org/baidu/2319DC" },
+  { name: "Stanford", logo: "https://cdn.simpleicons.org/stanford/8C1515" },
+  { name: "MIT", logo: "https://cdn.simpleicons.org/mit/A31F34" },
+  { name: "Berkeley", logo: "https://cdn.simpleicons.org/berkeley/003262" },
+  { name: "CMU", logo: "https://cdn.simpleicons.org/carnegiemellon/C41230" },
+  { name: "Hugging Face", logo: "https://cdn.simpleicons.org/huggingface/FFD21E" },
+  { name: "Cohere", logo: "https://cdn.simpleicons.org/cohere/39594C" },
+  { name: "Mistral AI", logo: "https://cdn.simpleicons.org/mistral/FF7000" },
+  { name: "Stability AI", logo: "https://cdn.simpleicons.org/stability/000000" },
+];
+
+interface Coin {
+  id: number;
+  x: number;
+  y: number;
+  company: string;
+  logo: string;
+  angle: number;
+  velocity: number;
+}
 
 export default function Home() {
+  const [coins, setCoins] = useState<Coin[]>([]);
+  const [coinId, setCoinId] = useState(0);
+
+  const handleProfileClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Create 12 coins in a circle pattern
+    const newCoins: Coin[] = [];
+    const numCoins = 12;
+    
+    for (let i = 0; i < numCoins; i++) {
+      const angle = (i / numCoins) * Math.PI * 2;
+      const velocity = 200 + Math.random() * 150;
+      const companyData = AI_COMPANIES[Math.floor(Math.random() * AI_COMPANIES.length)];
+      
+      newCoins.push({
+        id: coinId + i,
+        x: centerX,
+        y: centerY,
+        company: companyData.name,
+        logo: companyData.logo,
+        angle,
+        velocity
+      });
+    }
+
+    setCoins(prev => [...prev, ...newCoins]);
+    setCoinId(prev => prev + numCoins);
+
+    // Remove coins after animation
+    setTimeout(() => {
+      setCoins(prev => prev.filter(coin => !newCoins.find(nc => nc.id === coin.id)));
+    }, 2500);
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
+      {/* Floating Coins */}
+      {coins.map(coin => {
+        const endX = Math.cos(coin.angle) * coin.velocity;
+        const endY = Math.sin(coin.angle) * coin.velocity;
+        
+        return (
+          <div
+            key={coin.id}
+            className="fixed pointer-events-none z-50 animate-coin-fly"
+            style={{
+              left: coin.x - 32,
+              top: coin.y - 32,
+              '--end-x': `${endX}px`,
+              '--end-y': `${endY}px`,
+            } as React.CSSProperties}
+          >
+            <div 
+              className="relative w-16 h-16 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600 shadow-xl border-4 border-yellow-500 flex items-center justify-center p-2 animate-coin-spin"
+            >
+              <img 
+                src={coin.logo} 
+                alt={coin.company}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        );
+      })}
+
       {/* Hero Section */}
       <section className="mb-20">
         <div className="flex flex-row items-center justify-between gap-6 mb-10">
@@ -19,7 +119,8 @@ export default function Home() {
             <img 
               src="/profile.png" 
               alt="Omeed Tehrani" 
-              className="w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 rounded-full object-cover border-3 sm:border-4 border-gray-200 dark:border-gray-800 shadow-lg"
+              onClick={handleProfileClick}
+              className="w-20 h-20 sm:w-28 sm:h-28 md:w-40 md:h-40 rounded-full object-cover border-3 sm:border-4 border-gray-200 dark:border-gray-800 shadow-lg cursor-pointer hover:scale-105 transition-transform active:scale-95"
             />
           </div>
         </div>

@@ -43,3 +43,31 @@ a {
     text-wrap: balance;
   }
 }
+
+@keyframes coinFly {
+  0% {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--end-x), var(--end-y)) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes coinSpin {
+  0% {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateY(1440deg) rotateZ(720deg);
+  }
+}
+
+.animate-coin-fly {
+  animation: coinFly 2s ease-out forwards;
+}
+
+.animate-coin-spin {
+  animation: coinSpin 2s linear forwards;
+}
