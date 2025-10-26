@@ -126,12 +126,13 @@ export default function Home() {
         </div>
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-            I'm a researcher and engineer focused on <span className="font-semibold text-gray-900 dark:text-gray-100">deep reinforcement learning</span>{" "}
-            and <span className="font-semibold text-gray-900 dark:text-gray-100">large language models</span>, with interests spanning{" "}
-            <span className="font-semibold text-gray-900 dark:text-gray-100">AI safety & alignment</span>. My current focus is on efficient ML systems, 
-            distributed training optimization, inference acceleration, and the systems-level challenges of scaling frontier models. 
-            Long-term, I want to go deeper down the abstraction stack, working on training efficiency, optimization algorithms, and the fundamental 
-            mechanisms that make intelligent systems work, whether that's at a frontier lab, research institution, or wherever the most interesting problems are.
+            I'm an engineer working on cloud infrastructure and applied inference at a Fortune 500 financial technology company, with a background in <span className="font-semibold text-gray-900 dark:text-gray-100">deep reinforcement learning</span>{" "}
+            and academic research. <a href="https://www.cs.utexas.edu/news/2025/utcs-alumnus-changing-paths-and-finding-purpose-tech" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Before computer science, I was pre-med</a> planning to pursue neuroscience, 
+            inspired by an obsession with Ben Carson growing up. That fascination with how brains work hasn't changed, just shifted focus. What captivates me now is <span className="font-semibold text-gray-900 dark:text-gray-100">compressed intelligence</span>: how children 
+            learn from remarkably few examples, building rich world models through play rather than memorizing trillions of tokens. Current approaches to machine superintelligence don't map to how 
+            we learned as children, and I think that gap - between biological sample efficiency and massive-scale training - is one of the most important problems in AI. 
+            I'm deeply fascinated by Andrej Karpathy's perspective on evolutionary encoding of intelligence, which hints that we might be simulating evolution itself through technological advancement - perhaps 
+            finding different paths to the same destination. Long-term, I want to work on the fundamental mechanisms of learning and intelligence, whether at a frontier lab, research institution, or wherever the most interesting problems are.
           </p>
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
             I hold both MS and BS degrees in Computer Science from UT Austin, where I conducted research in the <span className="font-semibold text-gray-900 dark:text-gray-100">RobIN Laboratory</span> 
