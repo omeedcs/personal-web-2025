@@ -16,7 +16,7 @@ interface Experience {
 const experiences: Experience[] = [
   {
     id: 1,
-    title: 'Senior Software Engineer',
+    title: 'Software Engineer, Applied Inference',
     company: 'Capital One',
     location: 'Plano, TX',
     period: 'Jul. 2025 - Present',
@@ -34,7 +34,7 @@ const experiences: Experience[] = [
   },
   {
     id: 3,
-    title: 'Software Engineer',
+    title: 'Software Engineer, Data',
     company: 'Capital One',
     location: 'Plano, TX',
     period: 'Aug. 2024 - Jul. 2025',

@@ -7,24 +7,10 @@ export default function PublicationsPage() {
         <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
           Papers & Analysis
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-          Deep dives into research papers on efficient ML systems, distributed training, and optimization techniques for frontier models. 
-          Documenting my evolution from robotic RL (RobIN/AMRL) to scalable ML infrastructure and training efficiency.
+        <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+          Here are some of my publications from academic research and ongoing independent work. I continue to pursue research interests 
+          alongside my full-time job, focusing on efficient ML systems and the intersection of reinforcement learning with large language models.
         </p>
-        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Current Focus:</span> Drawing inspiration from work like{" "}
-            <a 
-              href="https://gaurigupta19.github.io/llms/distributed%20ml/optimization/2025/10/02/efficient-ml.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              this deep dive on efficient ML systems
-            </a>
-            {" "}— exploring distributed training optimization, quantization, memory-efficient fine-tuning, and inference acceleration.
-          </p>
-        </div>
       </div>
 
       <div className="space-y-12">
@@ -146,76 +132,6 @@ export default function PublicationsPage() {
           </div>
         </section>
 
-        {/* Paper Analyses - Coming Soon */}
-        <section>
-          <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-6">
-            Paper Deep Dives
-          </h2>
-          <div className="border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Coming soon: In-depth analyses of papers on efficient ML systems, distributed training, and optimization.
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">
-              Currently studying recent work on training efficiency, quantization techniques, and inference optimization. 
-              Will be documenting implementations and insights from papers on ZeRO, FSDP, FlashAttention, and more.
-            </p>
-          </div>
-        </section>
-
-        {/* Research Areas */}
-        <section>
-          <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-6">
-            Current Reading List
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Distributed Training & Optimization
-              </h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li>• "ZeRO: Memory Optimizations Toward Training Trillion Parameter Models" (Rajbhandari et al.)</li>
-                <li>• "PyTorch FSDP: Experiences on Scaling Fully Sharded Data Parallel" (Zhao et al.)</li>
-                <li>• "Megatron-LM: Training Multi-Billion Parameter Models Using Model Parallelism" (Shoeybi et al.)</li>
-                <li>• "GPipe: Easy Scaling with Micro-Batch Pipeline Parallelism" (Huang et al.)</li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Efficient Fine-Tuning & Quantization
-              </h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li>• "LoRA: Low-Rank Adaptation of Large Language Models" (Hu et al.)</li>
-                <li>• "QLoRA: Efficient Finetuning of Quantized LLMs" (Dettmers et al.)</li>
-                <li>• "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale" (Dettmers et al.)</li>
-                <li>• "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers" (Frantar et al.)</li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Inference & Architecture Optimization
-              </h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li>• "FlashAttention: Fast and Memory-Efficient Exact Attention" (Dao et al.)</li>
-                <li>• "Inference Optimization for Large Language Models" (various)</li>
-                <li>• "KV Cache Optimization" and "Continuous Batching" techniques</li>
-                <li>• Gradient compression & communication-efficient training papers</li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Foundation (Earlier Work)
-              </h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li>• "Decision Transformer: Reinforcement Learning via Sequence Modeling" (Chen et al.)</li>
-                <li>• "Attention Is All You Need" (Vaswani et al.)</li>
-                <li>• Robotic manipulation and imitation learning papers from RobIN/AMRL work</li>
-              </ul>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   );
