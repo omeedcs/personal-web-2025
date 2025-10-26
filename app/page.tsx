@@ -251,11 +251,17 @@ export default function Home() {
               </h3>
             </a>
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">Side Project with Friends • 2024 - Present</p>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Working on an interesting space project with some friends—building AI-powered satellite network systems 
               for resilient space telecommunications. Exploring how machine learning can optimize orbital communications 
               and mesh network routing at scale. Still figuring things out, but it's a fun excuse to learn about space systems.
             </p>
+            <Link 
+              href="/constellation-io/demo"
+              className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-lg transition-colors font-medium shadow-sm hover:shadow-md"
+            >
+              Watch AI Demo →
+            </Link>
           </div>
         </div>
       </section>
