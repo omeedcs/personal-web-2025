@@ -446,7 +446,7 @@ export default function Home() {
         </h2>
         <div className="space-y-4 text-sm">
           <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">AI Infrastructure @ Capital One</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Applied Inference @ Capital One</h3>
             <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">Software Engineer, Applied Inference • July 2025 - Present</p>
             <p className="text-gray-600 dark:text-gray-400">Production AI infrastructure and agentic systems. Model Context Protocol integrations, Google A2A agent communication, Python APIs for LLM orchestration.</p>
           </div>
