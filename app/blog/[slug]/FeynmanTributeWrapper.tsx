@@ -9,15 +9,35 @@ interface FeynmanTributeWrapperProps {
 export default function FeynmanTributeWrapper({ children }: FeynmanTributeWrapperProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isScrollVisible, setIsScrollVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(false);
+
+  const handlePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play();
+        setIsPlaying(true);
+        setShowPlayButton(false);
+      }
+    }
+  };
 
   useEffect(() => {
     // Auto-play music with a slight delay
     const timer = setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.volume = 0.3; // Set to 30% volume
-        audioRef.current.play().catch(err => {
-          console.log("Audio autoplay prevented:", err);
-        });
+        audioRef.current.play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(err => {
+            console.log("Audio autoplay prevented:", err);
+            setShowPlayButton(true);
+          });
       }
     }, 500);
 
@@ -42,6 +62,20 @@ export default function FeynmanTributeWrapper({ children }: FeynmanTributeWrappe
       <audio ref={audioRef} loop>
         <source src="/music/Primavera.mp3" type="audio/mpeg" />
       </audio>
+
+      {/* Play Button */}
+      {showPlayButton && (
+        <button
+          onClick={handlePlayPause}
+          className="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+          aria-label="Play background music"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+      )}
 
       {/* Custom Styles for Scroll Animation */}
       <style jsx global>{`
