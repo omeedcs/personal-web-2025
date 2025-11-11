@@ -6,6 +6,11 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Omeed Tehrani - AI Safety, RL & Systems Research",
   description: "Researcher and engineer working on deep reinforcement learning, AI safety & alignment, and large language models. From RobIN Lab robotics to frontier AI infrastructure at Capital One. UT Austin MS/BS CS.",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 export default function RootLayout({

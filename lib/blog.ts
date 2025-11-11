@@ -11,6 +11,7 @@ export interface Post {
   description?: string;
   author?: string;
   content: string;
+  special?: string;
 }
 
 export async function getAllPosts(): Promise<Post[]> {
@@ -35,6 +36,7 @@ export async function getAllPosts(): Promise<Post[]> {
         description: data.description,
         author: data.author,
         content,
+        special: data.special,
       };
     });
 
@@ -67,6 +69,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       description: data.description,
       author: data.author,
       content,
+      special: data.special,
     };
   } catch (error) {
     return null;

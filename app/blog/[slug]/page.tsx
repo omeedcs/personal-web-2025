@@ -2,6 +2,8 @@ import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Image from "next/image";
+import FeynmanTributeWrapper from "./FeynmanTributeWrapper";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -58,11 +60,99 @@ const components = {
   ),
 };
 
+const feynmanComponents = {
+  ...components,
+  h1: (props: any) => (
+    <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-8 mt-12 text-center" {...props} />
+  ),
+  h2: (props: any) => (
+    <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-6 mt-10" {...props} />
+  ),
+  p: (props: any) => (
+    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-lg" {...props} />
+  ),
+  ul: (props: any) => (
+    <ul className="list-none space-y-3 mb-6 text-gray-700 dark:text-gray-300 text-lg" {...props} />
+  ),
+  li: (props: any) => (
+    <li className="pl-0" {...props} />
+  ),
+  div: (props: any) => {
+    if (props.className === "scroll-letter") {
+      return (
+        <div className="scroll-letter-container my-16">
+          <div className="scroll-letter-inner">
+            <div className="scroll-content">
+              {props.children}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return <div {...props} />;
+  },
+};
+
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
     notFound();
+  }
+
+  // Special handling for Feynman tribute
+  if (post.special === "feynman-tribute") {
+    return (
+      <FeynmanTributeWrapper>
+        <article className="max-w-5xl mx-auto px-6 py-16">
+          <Link
+            href="/blog"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-8 inline-block"
+          >
+            ← Back to Blog
+          </Link>
+
+          {/* Feynman Portrait */}
+          <div className="feynman-hero">
+            <Image
+              src="/feynman.jpg"
+              alt="Richard Feynman"
+              width={400}
+              height={500}
+              style={{ width: 'auto', height: 'auto' }}
+              priority
+            />
+          </div>
+
+          <h1 className="tribute-title">
+            {post.title}
+          </h1>
+
+          <div className="text-center text-sm text-gray-500 dark:text-gray-400 mb-12">
+            <time dateTime={post.date}>{post.date}</time>
+            {post.author && <span> • by {post.author}</span>}
+          </div>
+
+          <div className="prose prose-xl dark:prose-invert max-w-none">
+            <MDXRemote source={post.content} components={feynmanComponents} />
+          </div>
+
+          <footer className="mt-20 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
+            <p className="text-gray-600 dark:text-gray-400 italic mb-6">
+              "I would rather have questions that can't be answered than answers that can't be questioned."
+              <br />
+              <span className="text-sm">— Richard Feynman</span>
+            </p>
+            <Link
+              href="/blog"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors inline-block"
+            >
+              ← Back to Blog
+            </Link>
+          </footer>
+        </article>
+      </FeynmanTributeWrapper>
+    );
   }
 
   return (
