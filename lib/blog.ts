@@ -12,6 +12,14 @@ export interface Post {
   author?: string;
   content: string;
   special?: string;
+  readingTime?: string;
+}
+
+function calculateReadingTime(content: string): string {
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
 }
 
 export async function getAllPosts(): Promise<Post[]> {
@@ -37,6 +45,7 @@ export async function getAllPosts(): Promise<Post[]> {
         author: data.author,
         content,
         special: data.special,
+        readingTime: calculateReadingTime(content),
       };
     });
 
@@ -70,6 +79,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       author: data.author,
       content,
       special: data.special,
+      readingTime: calculateReadingTime(content),
     };
   } catch (error) {
     return null;

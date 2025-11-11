@@ -71,3 +71,35 @@ a {
 .animate-coin-spin {
   animation: coinSpin 2s linear forwards;
 }
+
+/* Syntax Highlighting Styles */
+pre code {
+  display: grid;
+  counter-reset: line;
+}
+
+pre code [data-line] {
+  padding: 0 1rem;
+  border-left: 2px solid transparent;
+}
+
+pre code [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: rgba(115, 138, 148, 0.4);
+}
+
+pre code [data-highlighted-line] {
+  background-color: rgba(200, 200, 255, 0.1);
+  border-left-color: rgb(59, 130, 246);
+}
+
+@media (prefers-color-scheme: dark) {
+  pre code [data-highlighted-line] {
+    background-color: rgba(100, 100, 255, 0.15);
+  }
+}

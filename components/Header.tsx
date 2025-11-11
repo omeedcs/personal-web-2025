@@ -104,7 +104,7 @@ export default function Header() {
               className="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Blog
+              Writing
             </Link>
             <Link 
               href="/contact" 

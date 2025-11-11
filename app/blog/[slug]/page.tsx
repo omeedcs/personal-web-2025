@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import FeynmanTributeWrapper from "./FeynmanTributeWrapper";
+import rehypePrettyCode from "rehype-pretty-code";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -27,36 +28,61 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+// MDX options with syntax highlighting
+const mdxOptions = {
+  mdxOptions: {
+    rehypePlugins: [
+      [
+        rehypePrettyCode as any,
+        {
+          theme: {
+            dark: "github-dark",
+            light: "github-light",
+          },
+          keepBackground: false,
+        },
+      ],
+    ],
+  },
+} as any;
+
 const components = {
   h1: (props: any) => (
-    <h1 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-6 mt-8" {...props} />
+    <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-4 mt-8" {...props} />
   ),
   h2: (props: any) => (
-    <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-4 mt-8" {...props} />
+    <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-3 mt-7" {...props} />
   ),
   h3: (props: any) => (
-    <h3 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-3 mt-6" {...props} />
+    <h3 className="text-lg font-medium tracking-tight text-gray-900 dark:text-gray-100 mb-2 mt-6" {...props} />
   ),
   p: (props: any) => (
-    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4" {...props} />
+    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 text-[15px]" {...props} />
   ),
   a: (props: any) => (
-    <a className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors" {...props} />
+    <a className="text-blue-600 dark:text-blue-400 hover:underline transition-all" {...props} />
   ),
-  code: (props: any) => (
-    <code className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
-  ),
+  code: (props: any) => {
+    // Inline code (not in pre)
+    if (!props.className) {
+      return (
+        <code className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
+      );
+    }
+    // Code blocks handled by rehype-pretty-code
+    return <code {...props} />;
+  },
   pre: (props: any) => (
-    <pre className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto mb-6 border border-gray-200 dark:border-gray-800" {...props} />
+    <pre className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto mb-4 border border-gray-200 dark:border-gray-800 text-sm [&>code]:bg-transparent [&>code]:p-0" {...props} />
   ),
   ul: (props: any) => (
-    <ul className="list-disc list-inside space-y-2 mb-4 text-gray-700 dark:text-gray-300" {...props} />
+    <ul className="list-disc list-inside space-y-1.5 mb-4 text-gray-700 dark:text-gray-300 text-[15px]" {...props} />
   ),
   ol: (props: any) => (
-    <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700 dark:text-gray-300" {...props} />
+    <ol className="list-decimal list-inside space-y-1.5 mb-4 text-gray-700 dark:text-gray-300 text-[15px]" {...props} />
   ),
   blockquote: (props: any) => (
-    <blockquote className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-6 text-gray-700 dark:text-gray-300" {...props} />
+    <blockquote className="border-l-2 border-gray-300 dark:border-gray-700 pl-4 italic my-4 text-gray-600 dark:text-gray-400 text-[15px]" {...props} />
   ),
 };
 
@@ -134,7 +160,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           </div>
 
           <div className="prose prose-xl dark:prose-invert max-w-none">
-            <MDXRemote source={post.content} components={feynmanComponents} />
+            <MDXRemote source={post.content} components={feynmanComponents} options={mdxOptions} />
           </div>
 
           <footer className="mt-20 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
@@ -156,34 +182,51 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   }
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-16">
+    <article className="max-w-2xl mx-auto px-6 py-12">
       <Link
         href="/blog"
-        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-8 inline-block"
+        className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors mb-8 inline-flex items-center gap-1"
       >
-        ← Back to Blog
+        <span>←</span> Back
       </Link>
 
-      <header className="mb-12">
-        <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
+      <header className="mb-10">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-3">
           {post.title}
         </h1>
-        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500">
-          <time dateTime={post.date}>{post.date}</time>
-          {post.author && <span>by {post.author}</span>}
+        <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-500">
+          <time dateTime={post.date}>
+            {new Date(post.date).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long',
+              day: 'numeric'
+            })}
+          </time>
+          {post.readingTime && (
+            <>
+              <span>•</span>
+              <span>{post.readingTime}</span>
+            </>
+          )}
+          {post.author && (
+            <>
+              <span>•</span>
+              <span>{post.author}</span>
+            </>
+          )}
         </div>
       </header>
 
-      <div className="prose prose-lg dark:prose-invert max-w-none">
-        <MDXRemote source={post.content} components={components} />
+      <div className="prose prose-base dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline">
+        <MDXRemote source={post.content} components={components} options={mdxOptions} />
       </div>
 
-      <footer className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
+      <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800">
         <Link
           href="/blog"
-          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+          className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors inline-flex items-center gap-1"
         >
-          ← Back to Blog
+          <span>←</span> Back to Writing
         </Link>
       </footer>
     </article>
