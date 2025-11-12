@@ -372,6 +372,22 @@ export default function Home() {
           <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400 italic">
             💡 Try typing <code className="bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">ls</code> to see more files, or <code className="bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">help</code> for commands
           </div>
+
+          {/* Life Goals */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Life Goals</h2>
+            <div className="space-y-4 text-sm">
+              <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Contribute to Artificial Super Intelligence</h3>
+                <p className="text-gray-600 dark:text-gray-400">Hopefully a frontier lab.</p>
+              </div>
+              
+              <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Conquer K2 Mountain</h3>
+                <p className="text-gray-600 dark:text-gray-400">8,611m. Other mountains are passively dangerous, but K2 actively tries to kill you.</p>
+              </div>
+            </div>
+          </div>
           
           {/* Education & Research Background */}
           <div className="mt-12">
