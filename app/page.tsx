@@ -588,6 +588,14 @@ export default function Home() {
         </h2>
         <div className="space-y-3 text-sm">
           <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-4">
+            <a href="https://www.geekwire.com/2025/startup-radar-meet-5-new-early-stage-tech-companies-building-in-seattle/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 dark:text-white hover:underline">
+              Startup Radar: Meet 5 new early-stage tech companies building in Seattle
+            </a>
+            <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">GeekWire • 2025</p>
+            <p className="text-gray-600 dark:text-gray-400">Featured in GeekWire's spotlight on emerging Seattle tech startups.</p>
+          </div>
+
+          <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-4">
             <a href="https://www.cs.utexas.edu/news/2025/utcs-alumnus-changing-paths-and-finding-purpose-tech" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 dark:text-white hover:underline">
               UTCS Alumnus on Changing Paths and Finding Purpose in Tech
             </a>
